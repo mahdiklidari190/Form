@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرم همکاری</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        select, input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border: 1px solid #00d4ff;
+        }
+        .btn {
+            padding: 10px 20px;
+            background: #00d4ff;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #008cba;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>فرم همکاری</h1>
+        <p>لطفاً نوع درخواست خود را انتخاب کنید:</p>
+        <select id="requestType" onchange="toggleForm()">
+            <option value="" disabled selected>انتخاب کنید...</option>
+            <option value="internship">کارآموزی</option>
+            <option value="collaboration">همکاری</option>
+        </select>
+
+        <!-- فرم کارآموزی -->
+        <div id="internshipForm" class="hidden">
+            <h3>راه‌های ارتباطی</h3>
+            <button class="btn" onclick="window.location.href='tel:09366686449'">تماس با شماره</button>
+            <button class="btn" onclick="window.location.href='https://t.me/BK_1ir'">ارتباط در تلگرام</button>
+        </div>
+
+        <!-- فرم همکاری -->
+        <div id="collaborationForm" class="hidden">
+            <h3>فرم همکاری</h3>
+            <form id="collabForm">
+                <input type="text" name="name" placeholder="نام و نام خانوادگی" required>
+                <input type="email" name="email" placeholder="ایمیل" required>
+                <input type="text" name="phone" placeholder="شماره تماس" required>
+                <textarea name="experience" rows="3" placeholder="تجربیات کاری خود را بنویسید"></textarea>
+                <p>آیا تا حالا با Unity کار کرده‌اید؟</p>
+                <select name="unityExperience" required>
+                    <option value="" disabled selected>انتخاب کنید...</option>
+                    <option value="yes">بله</option>
+                    <option value="no">خیر</option>
+                </select>
+                <p>آیا در سبک 3D کار کرده‌اید؟</p>
+                <select name="style3D" required>
+                    <option value="" disabled selected>انتخاب کنید...</option>
+                    <option value="yes">بله</option>
+                    <option value="no">خیر</option>
+                </select>
+                <p>مدت زمان تجربه کاری خود را در Unity وارد کنید:</p>
+                <input type="text" name="duration" placeholder="مثال: 2 سال" required>
+                <button type="submit" class="btn">ثبت</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm() {
+            const requestType = document.getElementById('requestType').value;
+            const internshipForm = document.getElementById('internshipForm');
+            const collaborationForm = document.getElementById('collaborationForm');
+
+            if (requestType === 'internship') {
+                internshipForm.classList.remove('hidden');
+                collaborationForm.classList.add('hidden');
+            } else if (requestType === 'collaboration') {
+                collaborationForm.classList.remove('hidden');
+                internshipForm.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
