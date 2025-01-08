@@ -6,58 +6,98 @@
     <title>فرم همکاری</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(120deg, #1e1e2f, #27293d, #1e1e2f);
             color: #fff;
             margin: 0;
             padding: 0;
             text-align: center;
+            overflow-x: hidden;
+        }
+        @keyframes neonGlow {
+            0%, 100% {
+                text-shadow: 0 0 5px #00d4ff, 0 0 10px #00d4ff, 0 0 20px #00d4ff, 0 0 30px #00d4ff;
+            }
+            50% {
+                text-shadow: 0 0 10px #ff0080, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080;
+            }
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #fff;
+            animation: neonGlow 2s infinite alternate;
         }
         .container {
             width: 90%;
-            max-width: 600px;
+            max-width: 700px;
             margin: 50px auto;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+            position: relative;
         }
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        select, input, textarea {
+        select, input, textarea, button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             border: none;
             border-radius: 5px;
             font-size: 1em;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            text-shadow: 0 0 5px #00ff6a;
         }
         select:focus, input:focus, textarea:focus {
             outline: none;
-            border: 1px solid #00d4ff;
+            box-shadow: 0 0 10px #ff0080, 0 0 20px #00d4ff;
         }
         .btn {
-            padding: 10px 20px;
-            background: #00d4ff;
-            border: none;
+            padding: 12px 20px;
+            background: linear-gradient(45deg, #ff0080, #00d4ff, #00ff6a);
             color: #fff;
-            border-radius: 5px;
-            font-size: 1em;
+            font-size: 1.1em;
             cursor: pointer;
-            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            transition: transform 0.2s ease-in-out;
         }
         .btn:hover {
-            background: #008cba;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #ff0080, 0 0 25px #00d4ff;
         }
         .hidden {
             display: none;
         }
+        .neon-border {
+            border: 2px solid;
+            border-image-slice: 1;
+            border-width: 3px;
+            border-image-source: linear-gradient(45deg, #ff0080, #00d4ff, #00ff6a);
+        }
+        .message {
+            font-size: 1.2em;
+            color: #ff4d4d;
+            margin-top: 20px;
+            text-shadow: 0 0 5px #ff4d4d, 0 0 10px #ff4d4d;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        button.btn {
+            animation: pulse 2s infinite;
+        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+    <div class="container neon-border">
         <h1>فرم همکاری</h1>
         <p>لطفاً نوع درخواست خود را انتخاب کنید:</p>
         <select id="requestType" onchange="toggleForm()">
@@ -75,28 +115,34 @@
 
         <!-- فرم همکاری -->
         <div id="collaborationForm" class="hidden">
-            <h3>فرم همکاری</h3>
-            <form id="collabForm" onsubmit="sendToTelegram(event)">
-                <input type="text" name="name" placeholder="نام و نام خانوادگی" required>
-                <input type="email" name="email" placeholder="ایمیل" required>
-                <input type="text" name="phone" placeholder="شماره تماس" required>
-                <textarea name="experience" rows="3" placeholder="تجربیات کاری خود را بنویسید"></textarea>
-                <p>آیا تا حالا با Unity کار کرده‌اید؟</p>
-                <select name="unityExperience" required>
+            <h3>سوالات همکاری</h3>
+            <form id="collabForm" onsubmit="checkEligibility(event)">
+                <p>آیا تا به حال با Unity کار کرده‌اید؟</p>
+                <select id="unityExperience" required>
                     <option value="" disabled selected>انتخاب کنید...</option>
                     <option value="yes">بله</option>
                     <option value="no">خیر</option>
                 </select>
-                <p>آیا در سبک 3D کار کرده‌اید؟</p>
-                <select name="style3D" required>
+                <p>آیا تا به حال در Unity در سبک 3D کار کرده‌اید؟</p>
+                <select id="style3D" required>
                     <option value="" disabled selected>انتخاب کنید...</option>
                     <option value="yes">بله</option>
                     <option value="no">خیر</option>
                 </select>
-                <p>مدت زمان تجربه کاری خود را در Unity وارد کنید:</p>
-                <input type="text" name="duration" placeholder="مثال: 2 سال" required>
-                <button type="submit" class="btn">ثبت</button>
+                <p>آیا شما مایل به همکاری هستید؟</p>
+                <select id="willingToCollaborate" required>
+                    <option value="" disabled selected>انتخاب کنید...</option>
+                    <option value="yes">بله</option>
+                    <option value="no">خیر</option>
+                </select>
+                <button type="submit" class="btn">بررسی</button>
             </form>
+            <div id="resultMessage" class="message hidden"></div>
+            <div id="contactOptions" class="hidden">
+                <h3>راه‌های ارتباطی</h3>
+                <button class="btn" onclick="window.location.href='tel:09366686449'">تماس با شماره</button>
+                <button class="btn" onclick="window.location.href='https://t.me/BK_1ir'">ارتباط در تلگرام</button>
+            </div>
         </div>
     </div>
 
@@ -115,56 +161,23 @@
             }
         }
 
-        function sendToTelegram(event) {
+        function checkEligibility(event) {
             event.preventDefault();
+            const unityExperience = document.getElementById('unityExperience').value;
+            const style3D = document.getElementById('style3D').value;
+            const willingToCollaborate = document.getElementById('willingToCollaborate').value;
 
-            const form = document.getElementById('collabForm');
-            const formData = new FormData(form);
+            const resultMessage = document.getElementById('resultMessage');
+            const contactOptions = document.getElementById('contactOptions');
 
-            const data = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                phone: formData.get('phone'),
-                experience: formData.get('experience'),
-                unityExperience: formData.get('unityExperience'),
-                style3D: formData.get('style3D'),
-                duration: formData.get('duration'),
-            };
-
-            const token = "YOUR_BOT_TOKEN"; // جایگزین با توکن ربات شما
-            const chatId = "@BK_1ir"; // آیدی کانال یا گروه تلگرام
-
-            const message = `
-                🔹 نام: ${data.name}
-                🔹 ایمیل: ${data.email}
-                🔹 شماره تماس: ${data.phone}
-                🔹 تجربیات کاری: ${data.experience}
-                🔹 کار با Unity: ${data.unityExperience}
-                🔹 سبک 3D: ${data.style3D}
-                🔹 مدت تجربه: ${data.duration}
-            `;
-
-            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message,
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    alert("اطلاعات با موفقیت ارسال شد!");
-                    form.reset();
-                } else {
-                    alert("خطا در ارسال اطلاعات. لطفاً دوباره تلاش کنید.");
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("خطا در ارسال اطلاعات. لطفاً دوباره تلاش کنید.");
-            });
+            if (unityExperience === 'yes' && style3D === 'yes' && willingToCollaborate === 'yes') {
+                resultMessage.classList.add('hidden');
+                contactOptions.classList.remove('hidden');
+            } else {
+                contactOptions.classList.add('hidden');
+                resultMessage.textContent = 'متاسفانه امکان همکاری وجود ندارد.';
+                resultMessage.classList.remove('hidden');
+            }
         }
     </script>
 </body>
