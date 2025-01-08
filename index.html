@@ -76,7 +76,7 @@
         <!-- فرم همکاری -->
         <div id="collaborationForm" class="hidden">
             <h3>فرم همکاری</h3>
-            <form id="collabForm">
+            <form id="collabForm" onsubmit="sendToTelegram(event)">
                 <input type="text" name="name" placeholder="نام و نام خانوادگی" required>
                 <input type="email" name="email" placeholder="ایمیل" required>
                 <input type="text" name="phone" placeholder="شماره تماس" required>
@@ -113,6 +113,58 @@
                 collaborationForm.classList.remove('hidden');
                 internshipForm.classList.add('hidden');
             }
+        }
+
+        function sendToTelegram(event) {
+            event.preventDefault();
+
+            const form = document.getElementById('collabForm');
+            const formData = new FormData(form);
+
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                experience: formData.get('experience'),
+                unityExperience: formData.get('unityExperience'),
+                style3D: formData.get('style3D'),
+                duration: formData.get('duration'),
+            };
+
+            const token = "YOUR_BOT_TOKEN"; // جایگزین با توکن ربات شما
+            const chatId = "@BK_1ir"; // آیدی کانال یا گروه تلگرام
+
+            const message = `
+                🔹 نام: ${data.name}
+                🔹 ایمیل: ${data.email}
+                🔹 شماره تماس: ${data.phone}
+                🔹 تجربیات کاری: ${data.experience}
+                🔹 کار با Unity: ${data.unityExperience}
+                🔹 سبک 3D: ${data.style3D}
+                🔹 مدت تجربه: ${data.duration}
+            `;
+
+            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert("اطلاعات با موفقیت ارسال شد!");
+                    form.reset();
+                } else {
+                    alert("خطا در ارسال اطلاعات. لطفاً دوباره تلاش کنید.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("خطا در ارسال اطلاعات. لطفاً دوباره تلاش کنید.");
+            });
         }
     </script>
 </body>
